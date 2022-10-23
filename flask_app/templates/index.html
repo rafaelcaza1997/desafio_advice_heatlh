@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+
+
+
+
+<div class="parallax-container">
+    <div class="parallax"><img src="{{ url_for('static', filename='img/background_index_tile_1.jpg') }}"></div>
+  </div>
+  <div class="section white">
+    <div class="row container">
+      <h2 class="header">Welcome to Carford Home Page.</h2>
+      <p class="grey-text text-darken-3 lighten-3">This is a site where you can control your customers' cars. With a limit of 3 cars each customer, it is possible to create models, create colors, verify the buyers of such models. In addition, of course, to registering new customers.</p>
+      <br>
+    </div>
+  </div>
+  <div class="parallax-container">
+    <div class="parallax"><img src="{{ url_for('static', filename='img/background_index_tile_2.jpg') }}"></div>
+
+  </div>
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+
+
+
+<div class="row">
+    
+    <div class="container">
+    
+    <br>
+
+    <div class="col offset-s1 s12">
+        
+    <h2>Models Details - {{ model_name }}</h2>
+    <span>
+      See all the clients with this model.
+    </span>
+    <br>
+    <br>
+    
+    
+    <div class="col s8 center-align">
+
+
+<ul class="collapsible">
+
+    {% for client in clients %}
+    <li>
+        <div class="collapsible-header">
+            <div class="col s10 left-align">
+                <i class="material-icons">face</i>{{ clients[client].name }} {{ clients[client].last_name }} 
+            </div>
+            <div class="col s2 right-align">
+                <a href='/clients/edit/{{ client }}/' class="secondary-content right grey-text text-darken-2"><i class="material-icons">edit</i></a>
+            </div>
+        </div>
+        <div class="collapsible-body">
+
+            {% for vehicles in clients[client]['client_vehicles'] %}
+                <p>{{ clients[client]['client_vehicles'][vehicles].model }} {{ clients[client]['client_vehicles'][vehicles].color }} </p>
+            {% endfor %}
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+<div class="left-align">
+    <button type='button' class="waves-effect waves-light btn orange lighten-2" onclick="history.go(-1)">Back</button>
+</div>
+
+</div>
+</div>
+</div>
+
+{% endblock %}

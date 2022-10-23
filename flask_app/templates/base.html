@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+
+  <body>
+      <nav class = 'orange lighten-2 '>
+        <div class=" container nav-wrapper navbar-height">
+            <a href="/" class="brand-logo"><img class = 'logo-img'src="{{ url_for('static', filename='img/logo_carshop.png') }}"></a> 
+
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+              {% if user.is_authenticated %}
+                <li><a href="/new_sale">New Sale</a></li>
+                <li><a href="/clients">Clients</a></li>
+                <li><a href="/models">Models</a></li>
+                <li><a href="/logout">Logout</a></li>
+                {% else %}
+                <li><a href="/login">Login</a></li>
+                <li><a href="/sign_up">Sing Up</a></li>
+              {% endif %}
+        </ul>
+        </div>
+    </nav>
+  
+    </div>
+
+
+    {% block content %}
+    {% endblock %}
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script> M.AutoInit();</script>
+
+    <script> 
+    
+        $(document).ready(function () {
+          checkNotifications();
+          
+        });
+
+        function checkNotifications(){
+
+
+          var messages_object = {{ get_flashed_messages(with_categories = true)|tojson  }};
+
+          for (const id_message in messages_object){
+                
+            
+              if (messages_object[id_message][0] == 'success'){ 
+                M.toast({html: messages_object[id_message][1] , classes:'green'})
+              }
+              if (messages_object[id_message][0] == 'error'){ 
+                M.toast({html: messages_object[id_message][1] , classes:'red'})
+              }
+          }
+          
+        }
+      </script>
+
+    {% block script %}    
+    {% endblock %}
+    
+
+  </body>
+</html>

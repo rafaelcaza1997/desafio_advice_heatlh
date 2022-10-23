@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="row">
+    
+  <div class="container">
+  
+  <br>
+
+  <div class="col offset-s2 s6">
+      
+  <h2>New Color</h2>
+  <span>
+    Add new color.
+    Click in the colorbox to set the RGB values.
+  </span>
+  <br>
+  <br>
+        <form class="col s12" method = 'POST'>
+
+          <div class="row">
+
+            <div class="input-field col s12">
+
+              <input id="input_color" type="text" class="validate" name="color_name" required>
+              <label for="input_color">Color name</label>
+
+            </div>
+
+            <div class="input-field col s12">
+              <div class="input-field col s2 left-align">
+                <input type="color" id="color_pick" name="color_pick" onchange="printColor(event)" value='#151515'>
+              </div>
+              <div class="input-field col s10 right-align">
+
+                <label id="input_hex">HEX code</label>
+  
+              </div>
+            </div>
+          
+
+          </div>
+
+        </form>
+
+        <div class="right-align" >
+
+          <button type='button' class="waves-effect waves-light btn orange lighten-2 btn" onclick="history.go(-1)">Back</button>
+        <button type='submit' class="waves-effect waves-light btn orange lighten-2 btn">Save</button>
+      </div>
+    </div>
+    </div>
+    </div>
+        
+
+      {% endblock %}
+
+      {% block script %}
+      <script>
+
+
+        function printColor(ev) {
+            const color = ev.target.value
+            document.getElementById('input_hex').textContent = color;
+        }
+
+        $(document).ready(function(){
+          document.getElementById('input_hex').textContent  = document.getElementById('color_pick').value;
+      });
+
+    </script>
+    {% endblock %}

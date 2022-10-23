@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+
+
+
+
+{% block content %}
+
+
+
+
+<div class="row">
+    
+    <div class="container">
+    
+    <br>
+
+    <div class="col offset-s1 s12">
+        
+    <h2>Client List</h2>
+    <span>
+      See all the clients. Click in the client bar to see the details.
+      Clients with no vehicles will be marked as Sales Opportunity.
+    </span>
+    <br>
+    
+    
+    <div class="col s8 center-align">
+        <div onclick="window.location =  window.location.href+'/new'"; class="collapsible-header"><i class="material-icons">add</i>Add New Client</div>
+        <ul class="tabs">
+            <li class="tab col s6 "><a class="active" href="#all_clients_tab">All Clients</a></li>
+            <li class="tab col s6"><a href="#sales_opportunity_tab">Sales Opportunity</a></li>
+        </ul>
+        </div>
+
+
+        <div id="all_clients_tab" class="col s8 ">
+            <ul class="collapsible grey-text text-darken-2">
+
+            {% for client in clients %}
+            <li>
+                <div class="collapsible-header">
+
+                <div class="col s7">
+                {% if clients[client].qnt_vehicles == 0 %}
+                    <i class="material-icons">paid</i>{{ clients[client].name }} {{ clients[client].last_name }} 
+                </div>  
+                {% else %}
+                    <i class="material-icons">face</i>{{ clients[client].name }} {{ clients[client].last_name }} 
+                </div>  
+                
+                <div class="col s3">                            
+                        {% for vehicle in clients[client].vehicles %}
+                            <i class="material-icons" style = "color:{{ clients[client]['vehicles'][vehicle]['hex_code'] }}">directions_car</i>
+                        {% endfor %}
+                    </div> 
+                {% endif %}
+                
+                {% if clients[client].qnt_vehicles == 0 %}
+                <div class="col s3 left">                            
+                    <span class="new badge yellow grey-text text-darken-2 " data-badge-caption="Sales Opportunity"></span>
+                </div>  
+                {% endif %}
+                <div class="col s2"> 
+                    <a href='clients/edit/{{ client }}/' class=""><i class="material-icons grey-text text-darken-2 ">edit</i></a>
+                    <a class="" onclick="confirmDelete({{ client }});"/><i class="material-icons grey-text text-darken-2 ">delete</i></a>
+                </div>
+                </div>
+
+                <div class="collapsible-body left-align">
+                    <p> Phone: {{ clients[client].phone }}</p>
+                    <p>Email: {{ clients[client].email }}</p>
+                </div>
+
+            </li>
+
+            {% endfor %}
+
+            </ul>
+        </div>
+
+        <div id="sales_opportunity_tab" class="col s8">
+            <ul class="collapsible">
+            {% for client in clients %}
+            {% if clients[client].qnt_vehicles == 0 %}
+            <li>
+                <div class="collapsible-header">
+                    <div class="col s10">
+                        <i class="material-icons">face</i>{{ clients[client].name }} {{ clients[client].last_name }} 
+                    </div>
+                    <div class="col s2">
+                        <a href='clients/edit/{{ client }}/' class=""><i class="material-icons grey-text text-darken-2">edit</i></a>
+                        <a class="" onclick="confirmDelete({{ client }});"/><i class="material-icons grey-text text-darken-2">delete</i></a>
+                    </div>
+
+                </div>
+                <div class="collapsible-body left-align">
+                    <p>Phone: {{ clients[client].phone }}</p>
+                    <p>Email: {{ clients[client].email }}</p>
+                </div>
+            </li>
+            {% endif %}
+            {% endfor %}
+            </ul>
+        </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+
+{% block script %}
+<script>
+    
+    function confirmDelete(id){
+        if (window.confirm("Confirm delete?")) {
+            window.location.href = '/clients/delete/'+id+'/'
+        }
+    }
+  
+    
+</script>
+{% endblock %}

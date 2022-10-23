@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+    
+  <div class="container">
+  
+  <br>
+
+  <div class="col offset-s1 s8">
+     
+  <div>
+    <h2>Client Registration</h2>
+  </div>
+  <span>
+    Registration of new customers. It is possible to register and then add vehicles.
+  </span>
+
+  <br>
+  <br>
+  <br>
+
+  
+        <div class="col s12" >
+
+          <div class="row">
+            <div class="input-field col s6">
+              <i class="material-icons prefix grey-text text-darken-2">account_circle</i>
+              <input id="input_name" type="text" class="validate" name="name">
+              <label for="input_name">First Name</label>
+            </div>
+            <div class="input-field col s6">
+              <input id="input_last_name" type="tel" class="validate" name="last_name">
+              <label for="input_last_name">Last Name</label>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="input-field col s6">
+              <i class="material-icons prefix grey-text text-darken-2">phone</i>
+              <input id="input_phone" type="tel" class="validate" name="phone">
+              <label for="input_phone">Telephone</label>
+            </div>
+
+            <div class="input-field col s6">
+              <i class="material-icons prefix grey-text text-darken-2">mail</i>
+              <input id="input_email" type="email" class="validate" name="email">
+              <label for="input_email">E-mail</label>
+            </div>
+          </div>
+
+
+
+          <!-- Modal New Vehicle -->
+          <div id="modal_add_vehicle" class="modal">
+            <div class="modal-content ">
+          
+              <div class="row">                
+                  <div class="col s12">
+
+                    <div>
+                      <h2 class="center-align">Add new vehicle</h2>
+                      <span>
+                        Choose the Model and Color for the new Vehicle.
+                      </span>
+                    </div>
+
+                    <br>
+                    
+                    <div class="input-field col s12">
+                      <select id="model_dropdown">
+                        <option value="" disabled selected>Vehicle Model</option>
+                        {% for id, model in models.items() %}
+                          <option value={{ id }}>{{ model }}</option>
+                        {% endfor %}               
+                      </select>
+                    </div>
+
+                    <div class="input-field col s12">
+                      <select id="color_dropdown" >
+                        <option value="" disabled selected>Color</option>
+
+                        {% for id, color in colors.items() %}
+                          <option value={{ id }}>{{ color }}</option>
+                        {% endfor %}
+
+                      </select>
+                    </div>
+                  </div>
+
+            </div>
+
+            <div class="modal-footer">
+              <a class=" modal-action modal-close waves-effect orange lighten-2 btn" type="button" onclick="closeModal();"/>Confirm<a>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        
+        
+        
+        <ul class="collection with-header" id="collection_vehicles">
+          
+          <li class='collection-header grey-text text-darken-2' id="collection_vehicles_content" ><h4>Vehicles</h4></li>
+          
+          <li class='collection-item' id="first_item_collection_vehicle"><div class='grey-text'>Without Vehicles</div></li>   
+          
+        </ul>
+
+
+
+        <div class='left'>
+          <!-- Modal New Vehicle Button -->
+          <a class="waves-effect waves-light btn modal-trigger orange lighten-2" href="#modal_add_vehicle"><i class="material-icons left">add_circle</i>New Vehicle</a>
+        </div>
+
+        <div class='right'>
+          <button type='button' class="waves-effect waves-light btn orange lighten-2" onclick="history.go(-1)">Back</button>
+          <button type='button' class="waves-effect waves-light btn orange lighten-2" onclick="sendData();">Save</button>
+        </div>
+
+        
+      </div>  
+    </div>  
+
+      {% endblock %}
+
+      {% block script %}
+      <script>
+
+        collectionVehiclesContent = document.getElementById('collection_vehicles_content')
+        collectionVehicles = document.getElementById('collection_vehicles')
+
+        var dictVehicles = new Object();
+        var idRow = 0
+
+        function deleteRow(id){
+
+          toDelete = document.getElementById(id)
+          if (toDelete !== null) {
+            toDelete.parentNode.removeChild( toDelete );
+            delete dictVehicles[id];
+          }     
+
+          if (collectionVehiclesContent.children.length == 1){
+            collectionVehiclesContent.innerHTML = collectionVehiclesContent.innerHTML+"<li class='collection-item ' id='first_item_collection_vehicle'><div class = 'grey-text'>Without Vehicles</div></li>"
+          }
+          return false;
+        }
+
+        function closeModal() {
+
+          idModel = $("#model_dropdown").val();
+          idColor = $("#color_dropdown").val();
+          
+          if (idModel == null || idColor == null){
+            alert("Not all required options have not been selected!")
+            return false;
+          }
+
+          firstItem = document.getElementById('first_item_collection_vehicle')
+
+          if (firstItem !== null) {
+          firstItem.parentNode.removeChild( firstItem );
+          }
+
+          
+          if (collectionVehiclesContent.children.length <= 3)
+          {
+
+            idRow = idRow+1
+
+
+
+            dictVehicles['row_'+idRow] = {
+              "id_model":idModel,
+              "id_color":idColor,
+            }
+
+            nameModel = {{ models|safe }}[idModel]
+            nameColor = {{ colors|safe }}[idColor]
+
+            //newRow = "<li class = 'collection-item ' id='row_"+idRow+"'> <div> <i class='material-icons'>close</i> <a class='orange-text text-lighten-2'>"+nameModel+" </a><a class='orange-text text-lighten-2'>"+nameColor+"</a> <a href='#' onclick='deleteRow("+'"row_'+idRow+'"'+");'></a></div></li>"
+            newRow = "<li class = 'collection-item ' id='row_"+idRow+"'> \
+                        <div class='valign-wrapper'> \
+                          <a class='grey-text text-darken-2' href='#' onclick='deleteRow("+'"row_'+idRow+'"'+");'><i class='material-icons'>close</i>  </a>\
+                          <a class='grey-text text-darken-2'>"+nameModel+" </a>\
+                          <a class='grey-text text-darken-2'>"+nameColor+"</a>\
+                        </div>\
+                      </li> "
+            
+            
+            collectionVehiclesContent.innerHTML = collectionVehiclesContent.innerHTML + newRow
+
+          }
+          else
+          {
+            alert("Maximum number of cars allowed")
+          }
+
+         }
+
+
+         function sendData() {
+
+          const inputName = document.getElementById("input_name").value;
+          const inputLastName = document.getElementById("input_last_name").value;
+          const inputPhone = document.getElementById("input_phone").value;
+          const inputEmail = document.getElementById("input_email").value;
+
+          const dictValues = {inputName,inputLastName,inputPhone,inputEmail,dictVehicles} 
+          const s = JSON.stringify(dictValues); 
+
+          console.log(s); 
+          
+          if (inputName == '' || inputLastName == '' || inputPhone == '' || inputEmail == ''){
+
+            for (const value in dictValues){
+              if (dictValues[value] == ''){
+                M.toast({html: value.replace('input','') + " is a REQUIRED FIELD" , classes:'red'})
+              }
+            }
+
+            return false;
+          }else{
+           $.ajax({
+               url: window.location.href,
+               type:"POST",
+               contentType: "application/json",
+               data: JSON.stringify(s),
+
+               success: function(data) {
+                 window.location.href = '/clients';
+               }
+             });
+            }
+          }
+          
+
+
+        $(document).ready(function(){
+          $('.modal-trigger').modal();
+          $('select').formSelect();
+        });
+
+      </script>
+      {% endblock %}

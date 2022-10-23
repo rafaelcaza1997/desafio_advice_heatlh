@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+    
+    <div class="container">
+    
+    <br>
+
+    <div class="col offset-s1 s12">
+
+    <div class="col s8 center-align">
+    
+    <div class="left-align">
+        <h2>Model List</h2>
+        <span>
+        See all the vehicle models. Click in the client bar to see the details.
+        Models with no clients can be deleted.
+        </span>
+        <blockquote>
+            If you want to delete a template, change all customer templates. By clicking on the option to view details, it is possible to view all customers who have this model.
+        </blockquote>
+    </div>
+
+    <br>
+    
+        <div onclick="window.location =  window.location.href+'/new'" ; class="collapsible-header"><i
+                class="material-icons">add</i><i class="material-icons">directions_car</i>Add New Vehicle Model</div>
+
+        <div onclick="window.location =  window.location.href+'/new_color'" ; class="collapsible-header"><i
+                class="material-icons">add</i><i class="material-icons">palette</i> Add Model Color</div>
+
+
+        <div class="row">
+
+            <div class="col s8">
+                <ul class="tabs">
+                    <li class="tab col s3"><a class="active" href="#models_tab">Models</a></li>
+                    <li class="tab col s3"><a href="#color_tab">Colors</a></li>
+                </ul>
+            </div>
+
+            <div id="models_tab" class="col s12">
+
+                <ul class="collapsible">
+                    {% for model in models %}
+                    <li>
+                        <div class="collapsible-header">
+                            
+                            <div class="col s10 left-align">
+                                <i class="material-icons">directions_car</i>{{ models[model].model}}
+                            </div>
+                            
+                            <div class="col s2 right-align">
+                                <a href='models/details/{{ model }}/' class="secondary-content right"><i class="material-icons grey-text text-darken-2">open_in_new</i></a>
+                                {% if models[model].qnt_vehicles == 0 %}
+                                <a class="secondary-content right" onclick="confirmDelete('model',{{ model }});"/><i class="material-icons grey-text text-darken-2">delete</i></a>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                        <div class="collapsible-body left-align">
+                            <p>Number of Vehicles Sold: {{ models[model].qnt_vehicles }}</p>
+                            <p>Number of Clients with this model: {{ models[model].qnt_clients }}</p>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+            
+            <div id="color_tab" class="col s12">
+                <ul class="collapsible">
+                    {% for color in colors %}
+                    <li>
+                        <div class="collapsible-header">
+                            <div class="col s10 left-align">
+                                <i class="material-icons" style = "color:{{ colors[color].hex }}">palette</i>{{ colors[color].color}}
+                            </div>
+                            
+                            <div class="col s2 right-align">
+                            {% if colors[color].qnt_vehicles == 0 %}
+                                <a class="secondary-content right" onclick="confirmDelete('color',{{ color }});"/><i class="material-icons grey-text text-darken-2">delete</i></a>
+                            {% endif %}
+                        </div>
+
+                        </div>
+                        <div class="collapsible-body left-align">
+                            <p>Number of Vehicles Sold: {{ colors[color].qnt_vehicles }}</p>
+                            <p>Number of Clients with this color: {{ colors[color].qnt_clients }}</p>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>  
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+{% endblock %}
+
+
+{% block script %}
+<script>
+    
+    function confirmDelete(mode, id){
+        if (window.confirm("Confirm delete?")) {
+            window.location.href = '/models/delete/'+mode+'/'+id+'/'
+        }
+    }
+  
+    
+</script>
+{% endblock %}

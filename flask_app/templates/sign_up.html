@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    
+  <div class="container">
+  
+  <br>
+
+  <div class="col offset-s2 s6">
+      
+  <h2>New Register</h2>
+  <br>
+  <br>
+  <div class="row">
+  <form class="col s12" method = 'POST'>
+    
+    <div class="row">
+        <div class="input-field col s12">
+          <i class="material-icons prefix">account_circle</i>
+          <input id="input_username" type="text" class="validate" name="username" required>
+          <label for="input_username">Username</label>
+        </div>
+      
+    
+        <div class="input-field col s12">
+          <i class="material-icons prefix">mail</i>
+          <input id="input_email" type="email" class="validate" name="email" required>
+          <label for="input_email">E-mail</label>
+        </div>
+        
+        <div class="input-field col s6">
+            <i class="material-icons prefix">lock</i>
+            <input id="input_password" type="password" class="validate" name="password" required>
+            <label for="input_password">Password</label>
+          </div>
+        <div class="input-field col s6">
+            <i class="material-icons prefix">lock</i>
+            <input id="conf_input_password" type="password" class="validate" name="conf_password" required>
+            <label for="conf_input_password">Confirm Password</label>
+          </div>
+
+          <button type='button' class="waves-effect waves-light btn orange lighten-2" onclick="sendData();">Sign Up</button>
+
+        </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+
+function sendData() {
+
+  const inputUsername = document.getElementById("input_username").value;
+  const inputEmail = document.getElementById("input_email").value;
+  const inputPassword = document.getElementById("input_password").value;
+  const inputConfPassword = document.getElementById("conf_input_password").value;
+
+  const dictValues = {inputUsername,inputEmail,inputPassword,inputConfPassword} 
+  const s = JSON.stringify(dictValues); 
+
+  console.log(s); 
+  
+  if (inputUsername == '' || inputEmail == '' || inputPassword == '' || inputConfPassword == ''){
+
+    for (const value in dictValues){
+      if (dictValues[value] == ''){
+        M.toast({html: value.replace('input','') + " is a REQUIRED FIELD" , classes:'red'})
+      }
+    }
+
+    return false;
+  }else{
+
+    if (inputPassword == inputConfPassword){
+
+
+   $.ajax({
+       url: window.location.href,
+       type:"POST",
+       contentType: "application/json",
+       data: JSON.stringify(s),
+
+       success: function(data) {
+         window.location.href = '/';
+       }
+     });
+    }else{
+
+      M.toast({html: 'Password and password verification must be the same' , classes:'red'})
+    }
+    }
+  }
+
+</script>
+
+{% endblock %}
