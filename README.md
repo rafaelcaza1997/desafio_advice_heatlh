@@ -11,7 +11,7 @@ docker run -p 5000:5000 -d [nome_imagem]
 Por exemplo:
 docker run -p 5000:5000 -d carford_flask 
 
-Caso deje obter a imagem do DockerHUB:
+Caso prefira obter a imagem pelo do DockerHUB:
 docker pull rafaelcazarotto/desafio_carford_flask:latest
 
 <h1>Primeiros Passos com a aplicação:</h1>
